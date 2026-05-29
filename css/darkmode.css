@@ -1,0 +1,56 @@
+body.dark{
+background:#111827;
+color:#f3f4f6;
+}
+
+body.dark .sidebar{
+background:#1f2937;
+}
+
+body.dark .panel,
+body.dark .card,
+body.dark .user-box{
+background:#1f2937;
+color:white;
+}
+
+body.dark input{
+background:#374151;
+color:white;
+border:1px solid #4b5563;
+}
+
+body.dark table{
+color:white;
+}
+
+body.dark td{
+border-color:#374151;
+}
+
+body.dark tr:hover{
+background:#2b3445;
+}
+
+body.dark .table-total{
+color:white;
+}
+
+body.dark .logo h2,
+body.dark .topbar h1{
+color:white;
+}
+
+body.dark #userEmail{
+color:#d1d5db;
+}
+
+body.dark .filter-buttons button:last-child{
+background:#374151;
+color:white;
+}
+
+body.dark .modal-content{
+background:#1f2937;
+color:white;
+}

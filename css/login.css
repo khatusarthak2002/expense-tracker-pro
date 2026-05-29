@@ -1,0 +1,101 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#f4f6f9;
+}
+
+.login-container{
+width:100%;
+max-width:450px;
+padding:20px;
+}
+
+.login-card{
+background:white;
+padding:40px;
+border-radius:16px;
+box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+
+.logo{
+font-size:60px;
+text-align:center;
+margin-bottom:10px;
+}
+
+h1{
+text-align:center;
+margin-bottom:10px;
+}
+
+p{
+text-align:center;
+color:#777;
+margin-bottom:25px;
+}
+
+input{
+width:100%;
+padding:14px;
+border:1px solid #ddd;
+border-radius:10px;
+margin-bottom:15px;
+font-size:15px;
+}
+
+input:focus{
+outline:none;
+border-color:#1677ff;
+}
+
+.primary-btn{
+width:100%;
+padding:14px;
+border:none;
+border-radius:10px;
+background:#1677ff;
+color:white;
+font-size:16px;
+cursor:pointer;
+margin-bottom:10px;
+}
+
+.secondary-btn{
+width:100%;
+padding:14px;
+border:none;
+border-radius:10px;
+background:#eef2ff;
+color:#333;
+font-size:16px;
+cursor:pointer;
+}
+
+#message{
+margin-top:15px;
+text-align:center;
+color:red;
+}
+.link-btn{
+    background:none;
+    border:none;
+    color:#1677ff;
+    cursor:pointer;
+    padding:0;
+    margin-bottom:15px;
+    text-align:right;
+    width:100%;
+}
+
+.link-btn:hover{
+    text-decoration:underline;
+}
