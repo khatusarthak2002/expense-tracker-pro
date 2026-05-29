@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Expense Tracker Pro</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/darkmode.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+    <!-- Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <span class="logo-icon">💰</span>
+            <h2>Expense Tracker</h2>
+        </div>
+
+        <ul>
+
+            <li class="active"
+                onclick="navigate('dashboard', event)">
+
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+
+            </li>
+
+            <li onclick="navigate('add', event)">
+
+                <i class="fa-solid fa-plus"></i>
+                Add Expense
+
+            </li>
+
+            <li onclick="navigate('list', event)">
+
+                <i class="fa-solid fa-list"></i>
+                All Expenses
+
+            </li>
+
+            <li onclick="navigate('budget', event)">
+
+                <i class="fa-solid fa-wallet"></i>
+                Budget
+
+            </li>
+
+            <li onclick="navigate('export', event)">
+
+                <i class="fa-solid fa-file-export"></i>
+                Export
+
+            </li>
+
+            <li onclick="navigate('settings', event)">
+
+                <i class="fa-solid fa-gear"></i>
+                Settings
+
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <h1>Expense Tracker Pro</h1>
+
+            <div class="topbar-right">
+
+                <button id="themeToggle">
+                    🌙 Dark Mode
+                </button>
+
+                <div class="user-box">
+
+                    <div class="avatar">👤</div>
+
+                    <div>
+
+                        <div class="user-name">
+                            Logged In
+                        </div>
+
+                        <div id="userEmail">
+                            user@email.com
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <button class="logout-btn"
+                    onclick="logoutUser()">
+
+                    Logout
+
+                </button>
+
+            </div>
+
+        </header>
+
+        <!-- DASHBOARD -->
+        <section class="cards"
+            id="dashboardSection">
+
+            <div class="card">
+
+                <div class="card-icon">💵</div>
+
+                <div>
+                    <h4>Total Expenses</h4>
+                    <h2 id="totalExpenseCard">₹0</h2>
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <div class="card-icon">📅</div>
+
+                <div>
+                    <h4>This Month</h4>
+                    <h2 id="monthExpenseCard">₹0</h2>
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <div class="card-icon">🎯</div>
+
+                <div>
+                    <h4>Monthly Budget</h4>
+                    <h2 id="budgetCard">₹0</h2>
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <div class="card-icon">📊</div>
+
+                <div>
+                    <h4>Remaining</h4>
+                    <h2 id="remainingCard">₹0</h2>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- FORM SECTION -->
+        <section class="form-grid"
+            id="addSection">
+
+            <!-- ADD EXPENSE -->
+            <div class="panel">
+
+                <h2>Add New Expense</h2>
+
+                <div class="expense-form">
+
+                    <input type="date"
+                        id="date">
+
+                    <input type="text"
+                        id="category"
+                        placeholder="Category">
+
+                    <input type="number"
+                        id="amount"
+                        placeholder="Amount">
+
+                    <button onclick="saveExpense()">
+                        Save Expense
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- BUDGET -->
+            <div class="panel budget-panel"
+                id="budgetSection">
+
+                <h2>Monthly Budget</h2>
+
+                <input type="number"
+                    id="monthlyBudget"
+                    placeholder="Budget Amount">
+
+                <button onclick="saveBudget()">
+                    Save Budget
+                </button>
+
+            </div>
+
+            <!-- SMART INSIGHTS -->
+            <div class="panel">
+
+                <h2>Smart Insights</h2>
+
+                <p>
+                    🏆 Top Category:
+                    <b id="topCategory">-</b>
+                </p>
+
+                <p>
+                    📊 Average Expense:
+                    <b id="avgExpense">₹0</b>
+                </p>
+
+                <p>
+                    🧾 Total Transactions:
+                    <b id="totalTransactions">0</b>
+                </p>
+
+                <p>
+                    💰 Highest Expense:
+                    <b id="highestExpense">₹0</b>
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- TABLE + CHART -->
+        <section class="content-grid"
+            id="listSection">
+
+            <!-- TABLE -->
+            <div class="panel table-panel">
+
+                <div class="table-header">
+
+                    <h2>Expense List</h2>
+
+                </div>
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody id="expenseTable">
+
+                    </tbody>
+
+                </table>
+
+                <div class="table-total">
+
+                    Total:
+                    <span id="total">
+
+                        ₹0
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- CHART -->
+            <div class="panel chart-panel">
+
+                <h2>Expense By Category</h2>
+
+                <canvas id="expenseChart"></canvas>
+
+            </div>
+
+        </section>
+
+        <!-- EXPORT -->
+        <section class="export-section"
+            id="exportSection">
+
+            <button class="csv-btn"
+                onclick="exportCSV()">
+
+                Export CSV
+
+            </button>
+
+            <button class="pdf-btn"
+                onclick="exportPDF()">
+
+                Export PDF
+
+            </button>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- EDIT MODAL -->
+<div id="editModal"
+    class="modal">
+
+    <div class="modal-content">
+
+        <span class="close"
+            onclick="closeModal()">
+
+            &times;
+
+        </span>
+
+        <h2>Edit Expense</h2>
+
+        <input type="hidden"
+            id="editId">
+
+        <input type="date"
+            id="editDate">
+
+        <input type="text"
+            id="editCategory">
+
+        <input type="number"
+            id="editAmount">
+
+        <button onclick="updateExpense()">
+
+            Update
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- SCRIPTS -->
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/expenses.js"></script>
+<script src="js/chart.js"></script>
+<script src="js/export.js"></script>
+<script src="js/theme.js"></script>
+
+<!-- AUTH CHECK -->
+<script>
+
+auth.onAuthStateChanged(user => {
+
+    if (!user) {
+
+        window.location.href = "login.html";
+
+    } else {
+
+        document.getElementById("userEmail")
+            .innerText = user.email;
+    }
+});
+
+</script>
+
+<!-- SIDEBAR NAVIGATION -->
+<script>
+
+function navigate(page, event) {
+
+    // ACTIVE CLASS
+    document.querySelectorAll(".sidebar li")
+        .forEach(li => li.classList.remove("active"));
+
+    if (event) {
+        event.target.closest("li")
+            .classList.add("active");
+    }
+
+    // NAVIGATION
+
+    if (page === "dashboard") {
+
+        document
+            .getElementById("dashboardSection")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+    }
+
+    if (page === "add") {
+
+        document
+            .getElementById("addSection")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+    }
+
+    if (page === "list") {
+
+        document
+            .getElementById("listSection")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+    }
+
+    if (page === "budget") {
+
+        document
+            .getElementById("budgetSection")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+
+        document
+            .getElementById("monthlyBudget")
+            .focus();
+    }
+
+    if (page === "export") {
+
+        document
+            .getElementById("exportSection")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+    }
+
+    if (page === "settings") {
+
+        alert("Settings coming soon");
+    }
+}
+
+</script>
+
+</body>
+</html>

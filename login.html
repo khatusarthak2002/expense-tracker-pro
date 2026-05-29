@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Expense Tracker Pro - Login</title>
+
+<link rel="stylesheet" href="css/login.css">
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+</head>
+
+<body>
+
+<div class="login-container">
+
+<div class="login-card">
+
+<div class="logo">
+💰
+</div>
+
+<h1>Expense Tracker Pro</h1>
+
+<p>
+Track your expenses smarter
+</p>
+
+<input
+type="email"
+id="email"
+placeholder="Email Address">
+
+<input
+type="password"
+id="password"
+placeholder="Password">
+
+<button
+class="primary-btn"
+onclick="loginUser()">
+Sign In
+</button>
+
+<button
+class="secondary-btn"
+onclick="registerUser()">
+Create Account
+</button>
+
+
+
+<button
+class="link-btn"
+onclick="resetPassword()">
+Forgot Password?
+</button>
+
+<div id="message"></div>
+
+</div>
+
+</div>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+
+</body>
+</html>
